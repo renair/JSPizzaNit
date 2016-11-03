@@ -1,0 +1,89 @@
+<%
+function getIngredientsArray(pizza) {
+    //Отримує вміст піци
+    var content = pizza.content;
+    var result = [];
+
+    //Object.keys повертає масив ключів в об’єкті JavaScript
+
+    Object.keys(content).forEach(function(key){
+
+        //a.concat(b) створює спільний масив із масивів a та b
+        result = result.concat(content[key]);
+    });
+
+    return result.join(", ");
+}
+%>
+
+
+<div class="col-md-6 col-lg-4">
+    <div class="thumbnail pizza-card">
+        <img class="pizza-icon" src="<%= pizza.icon %>" alt="Pizza">
+        <% if(pizza.is_new) { %>
+            <h3 class="pizza-label-new">
+                <span class="label label-danger">Нова</span>
+            </h3>
+        <% } else if(pizza.is_popular) {%>
+            <h3 class="pizza-label-popular">
+                <span class="label label-success">Popular</span>
+            </h3>
+        <% } %>
+
+        <div class="caption">
+            <span class="title left-centered pizza-title"><%= pizza.title %></span>
+            <div class="type left-centered pizza-type"><%= pizza.type %></div>
+            <div class="description left-centered pizza-description">
+            <%= getIngredientsArray(pizza) %>
+            </div>
+            <div class="row">
+               <% 
+                var small = "6";
+                var big = "6";
+                if(pizza['small_size'] && !pizza['big_size']){
+                    small = "12";
+                    big = "6 hide";
+                }
+                
+                if(!pizza['small_size'] && pizza['big_size']){
+                    small = "6 hide";
+                    big = "12";
+                }
+                %>
+                
+                <% if(pizza['small_size']) { %>
+                <div class="col-sm-<%= small %> pizza-small">
+                    <div>
+                        <img class="ui right spaced avatar image" src="assets/images/size-icon.svg">
+                        <span class="diagonal"><%= pizza['small_size'].size %></span>
+                    </div>
+                    <div>
+                        <img class="ui right spaced avatar image" src="assets/images/weight.svg">
+                        <span class="gram"><%= pizza['small_size'].weight %></span>
+                    </div>
+                    <h2>
+                        <div class="price"><%= pizza['small_size'].price %><div class="currency"> грн.</div></div>
+                    </h2>
+                    <a href="#" class="btn btn-warning buy-button-small" role="button">Купити</a>
+                </div>
+                <% } %>
+                <% if(pizza['big_size']) { %>
+                <div class="col-sm-<%= big %> pizza-big">
+                    <div>
+                        <img class="ui right spaced avatar image" src="assets/images/size-icon.svg">
+                        <span class="diagonal"><%= pizza['big_size'].size %></span>
+                    </div>
+                    <div>
+                        <img class="ui right spaced avatar image" src="assets/images/weight.svg">
+                        <span class="gram"><%= pizza['big_size'].weight %></span>
+                    </div>
+                    <h2>
+                        <div class="price"><%= pizza['big_size'].price %><div class="currency"> грн.</div></div>
+                    </h2>
+                    <a href="#" class="btn btn-warning  buy-button-big" role="button">Купити</a>
+                </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
