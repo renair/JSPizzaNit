@@ -7,12 +7,30 @@ var Pizza_List = require('../Pizza_List');
 
 //this are filters
 var Filters = {
-    filter_button_all_pizza: "",
-    filter_button_meat: "meat",
-    filter_button_pineapples: "pineapple",
-    filter_button_mushrooms: "mushroom",
-    filter_button_ocean: "ocean",
-    filter_button_tomato: "additional"
+    filter_button_all_pizza: {
+        filter: "",
+        title: "Усі піци"
+    },
+    filter_button_meat: {
+        filter: "meat",
+        title: "Піци з м'ясом"
+    },
+    filter_button_pineapples: {
+        filter: "pineapple",
+        title: "Піци з ананасами"
+    },
+    filter_button_mushrooms: {
+        filter: "mushroom",
+        title: "Піци з грибами"
+    },
+    filter_button_ocean: {
+        filter: "ocean",
+        title: "Піци з морепродуктами"
+    },
+    filter_button_tomato: {
+        filter: "additional",
+        title: "Вега піци"
+    }
 };
 
 //HTML едемент куди будуть додаватися піци
@@ -40,11 +58,13 @@ function showPizzaList(list) {
 
         var $node = $(html_code);
 
-        $node.find(".buy-button-big").click(function(){
+        $node.find(".buy-button-big").click(function(event){
+            event.preventDefault();
             PizzaCart.addToCart(pizza, PizzaCart.PizzaSize.Big);
         });
         
-        $node.find(".buy-button-small").click(function(){
+        $node.find(".buy-button-small").click(function(event){
+            event.preventDefault();
             PizzaCart.addToCart(pizza, PizzaCart.PizzaSize.Small);
         });
 
@@ -58,12 +78,14 @@ function showPizzaList(list) {
 function filterPizza(filter) {
     //Масив куди потраплять піци які треба показати
     var pizza_shown = [];
+    $("#filter-title").text(filter.title);
+    query = filter.filter;
 
     Pizza_List.forEach(function(pizza){
-        if(filter == "additional" && pizza.content['meat']) {
+        if(query == "additional" && pizza.content['meat']) {
             return;
         }
-        if(!filter || pizza.content[filter]) {
+        if(!query || pizza.content[query]) {
             pizza_shown.push(pizza);
         }
 

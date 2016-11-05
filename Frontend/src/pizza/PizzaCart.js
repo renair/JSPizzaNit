@@ -29,7 +29,7 @@ var $no_pizzas = $('<div class="no-order-text">Пусто в холодильн�
 function addToCart(pizza, size) {
     //Додавання однієї піци в кошик покупок
     for(var i = 0;i < Cart.length;++i){
-        if(Cart[i].pizza == pizza && Cart[i].size == size) {
+        if(Cart[i].pizza.id == pizza.id && Cart[i].size == size) {
             Cart[i].quantity += 1;
             updateCart();
             return;
@@ -133,9 +133,11 @@ function updateCart() {
     if(Cart.length) {
         Cart.forEach(showOnePizzaInCart);
         $cart.remove(".no-order-text");
+        $("#buy-button").removeAttr("disabled");
     }
     else {
         $cart.append($no_pizzas);
+        $("#buy-button").attr("disabled","");
     }
     $count.text(Cart.length);
     LocalStorage.set("PizzaCart", Cart);

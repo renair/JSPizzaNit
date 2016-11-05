@@ -35,17 +35,20 @@ body {
     min-height: 175px;
 
     .title {
-        margin-top: 40px;
         text-align: center;
-        padding: 5px;
+        //padding: 5px;
         width: 100%;
-        margin-bottom: 10px;
+        height: 10%;
+        max-height: 200px;
+        min-height: 50px;
+        //margin-bottom: 10px;
 
         .title-text {
             font-size: @middle-text;
             display: inline-block;
             text-align: left;
             margin-left: -40px;
+            margin-top: 30px;
         }
 
         .clear-order {
@@ -53,25 +56,68 @@ body {
             color:grey;
             display: inline-block;
             float: right;
-            padding-top: 6px;
+            padding-top: 32px;
+            padding-right: 5px;
+            cursor: pointer;
         }
     }
 
     .all-orders {
-        box-sizing: padding-box;
-        -webkit-box-flex: 1;
-        -moz-box-flex: 1;
-        box-flex: 1;
-        overflow-x: hidden;
+        box-sizing: content-box;
+        overflow-x: scroll;
+        overflow-y: none;
         background-color: @secondary-color;
-        border-bottom: 1px solid grey;
-        overflow: scroll;
-        height: 100%;
+        border-bottom: 1px solid @grey;
+        height: 70%;
 
         .no-order-text {
             font-size: @middle-text;
             text-align: center;
             margin-top: 50px;
+        }
+        
+        .pizza-row .order-one {
+            height: 125px;
+            position: relative;
+            width: 100%;
+            border-bottom: 1px solid grey;
+            padding: 10px;
+            background-color: #F5F5F5;
+            
+            .pizza-title {
+                font-size: @middle-large-text;
+                color:@bootstrap-orange;
+                z-index: 10;
+            }
+            
+            .price-box {
+                margin-top: 10px;
+                z-index: 10;
+                
+                .remove-pizza {
+                    margin-left: 20px;
+                }
+                
+                .label {
+                    font-size: @middle-small-text+2px;
+                }
+            }
+            
+            .img-aside {
+                position: absolute;
+                top: 6px;
+                right: -50px;
+                height: 100px;
+                z-index: 0;
+            }
+        }
+        
+        .circle {
+            border-radius: 360px;
+            display: inline-block;
+            height: 30px;
+            width: 30px;
+            padding: 6px 0;
         }
     }
 
@@ -80,13 +126,20 @@ body {
         position:absolute;
         bottom: 0px;
         width: 100%;
-        height: 100px;
+        height: 20%; //100px
+        max-height: 200px;
+        min-height: 100px;
         padding: 0px 20px;
         border-top: 1px solid darken(@secondary-color,25%);
         padding-top: 20px;
 
         .submit-button {
             height: 100%;
+            
+            .price {
+                font-weight: 700;
+                font-size: @middle-text - 3px;
+            }
         }
     }
 }
