@@ -1,0 +1,50 @@
+<%- include('common/header.ejs') %>
+<!-- Main content -->
+<div class="container-fluid pizza-block">
+    <div class="page-title">
+        <h2>
+            <span class="title-text" id="filter-title">Усі піци</span>
+            <span class="badge counter orange-circle" id="pizza-list-counter">6</span>
+        </h2>
+    </div>
+    <div class="pizza-selector">
+        <ul class="nav nav-pills pizza-selector-pills">
+            <li role="presentation" class="active pizza-filter-button" id="filter_button_all_pizza">
+                <a>
+                    Усі
+                </a>
+            </li>
+            <li role="presentation" class="pizza-filter-button" id="filter_button_meat">
+                <a>
+                    Мясні
+                </a>
+            </li>
+            <li role="presentation" class="pizza-filter-button" id="filter_button_pineapples">
+                <a>
+                    З ананасами
+                </a>
+            </li>
+            <li role="presentation" class="pizza-filter-button" id="filter_button_mushrooms">
+                <a>
+                    З грибами
+                </a>
+            </li>
+            <li role="presentation" class="pizza-filter-button" id="filter_button_ocean">
+                <a>
+                    З морепродуктами
+                </a>
+            </li>
+            <li role="presentation" class="pizza-filter-button" id="filter_button_tomato">
+                <a>
+                    Вега
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="row" id="pizza_list">
+       
+    </div>
+</div>
+
+<%- include('common/cart.ejs') %>
+<%- include('common/footer.ejs') %>

@@ -1,0 +1,26 @@
+<div class="right-menue">
+    <div class="title">
+        <span class="title-text">Замовлення <span class="orange-circle orders-count" id="pizza-counter">0</span></span>
+        <span class="clear-order">Очистити замовлення</span>
+    </div>
+    <div class="all-orders" id="cart">
+
+    </div>
+    <div class="submit-order">
+        <div class="submit-button">
+           <%if(final){%>
+            <a role="button" class="btn btn-default btn-lg btn-block" id="buy-button" href="/">
+                Редагувати замовлення
+            </a>
+            <%}
+            else{%>
+                <a role="button" class="btn btn-warning btn-lg btn-block" id="buy-button" href="/order.html">
+                Замовити
+            </a>
+            <%}%>
+            <div class="price">
+               Загальна сумма замовлення: <span id="total_price">0</span>
+            </div>
+        </div>
+    </div>
+</div>
