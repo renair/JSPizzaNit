@@ -89,11 +89,8 @@ function filterPizza(filter) {
         if(!query || pizza.content[query]) {
             pizza_shown.push(pizza);
         }
-
-        //TODO: зробити фільтри
     });
 
-    //Показати відфільтровані піци
     showPizzaList(pizza_shown);
 }
 
@@ -102,9 +99,11 @@ function initialiseMenu() {
     API.getPizzaList(function(err, data){
         if(err){
             Pizza_List = [];
+            console.log(Pizza_List);
         }
         else{
             Pizza_List = data;
+            console.log(Pizza_List);
         }
         showPizzaList(Pizza_List)
     });

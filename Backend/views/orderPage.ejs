@@ -39,8 +39,8 @@
                     <div class="col-md-5 order-summary">
                         <div class="bs-callout bs-callout-info">
                             <h4>Інформація про замовлення</h4>
-                            <p class="order-summery-time"><b>Приблизний час доставки</b>: <span id="delivery-time">16 мин.</span></p>
-                            <p class="order-summery-adress"><b>Адреса доставки:</b> <span id="delivery-place">Днепровский район, Киев, Украина</span></p>
+                            <p class="order-summery-time"><b>Приблизний час доставки</b>: <span id="delivery-time"></span></p>
+                            <p class="order-summery-adress"><b>Адреса доставки:</b> <span id="delivery-place"></span></p>
                         </div>
                     </div>
                 </div>
@@ -55,7 +55,13 @@
                         </div>
                     </div>
                 </div>
+                <div id="googleMap"></div>
             </div>
         </div>
+        <div id="liqpay"></div>
+        
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCE3xtGEcniuk09AoBb1gd1hJMutIRPU5E">
+        </script>
+        <script src="https://static.liqpay.com/libjs/checkout.js"></script>
 <%- include('common/cart.ejs') %>
 <%- include('common/footer.ejs') %>

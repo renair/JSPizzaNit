@@ -40,7 +40,58 @@ exports.createOrder = function(order_info, callback) {
     backendPost("/api/create-order/", order_info, callback);
 };
 
+exports.makeOrder = function(order_info, callback) {
+    backendPost("/api/make-order/", order_info, callback);
+};
+
 },{}],2:[function(require,module,exports){
+var API = require("./API");
+
+function createDescription(pizza_cart){
+    var result = $("#inputPhone input").val() + " " + $("#inputAdress input").val() + " " + $("#inputName input").val() + " ";
+    pizza_cart.forEach(function(element){
+        result += element.pizza.title + " ";
+    });
+    return result;
+}
+
+$("#send-order").click(function(){
+    if(!$("#inputPhone").hasClass("has-success") || !$("#inputAdress").hasClass("has-success") || !$("#inputName").hasClass("has-success")){
+        return;
+    }
+    
+    var data = {
+        version: 3,
+        public_key: "i76764037953",
+        action: "pay",
+        amount: $("#total_price").text(),
+        currency: "UAH",
+        description: createDescription(Cart),
+        order_id: Math.random(),
+        sandbox: 1
+    };
+    console.log(data);
+    
+    API.makeOrder(data, function(err,response){
+        if(!err){
+            console.log("data returned");
+            LiqPayCheckout.init({
+                data: response.data,
+                signature: response.signature,
+                embedTo: "#liqpay",
+                mode: "popup"
+            }).on("liqpay.callback",function(data){
+                console.log(data);
+                console.log(data.status);
+            }).on("liqpay.ready",function(data){
+                
+            }).on("liqpay.close",function(data){
+                
+            });
+        }
+    });
+});
+},{"./API":1}],3:[function(require,module,exports){
 var basil = require('basil.js');
 basil = new basil();
 
@@ -53,7 +104,7 @@ exports.set = function(key, value) {
     return basil.set(key, value);
     //return localStorage.setItem(key,value);
 }
-},{"basil.js":9}],3:[function(require,module,exports){
+},{"basil.js":10}],4:[function(require,module,exports){
 LocalStorage = require("./LocalStorage");
 
 Cart = LocalStorage.get("PizzaCart");
@@ -63,17 +114,17 @@ $NAME_INPUTTER = $("#inputName");
 $ADDRESS_INPUTTER = $("#inputAdress");
 
 $ADDRESS_INPUTTER.find("input").keyup(function(){
-    var regexp = /[A-zА-яі ',\-0-9]{3,}/i;
+    var regexp = /^[A-zА-яіїІЇ ',\-0-9]{3,}$/i;
     switcher($ADDRESS_INPUTTER, regexp);
 });
 
 $PHONE_INPUTTER.find("input").keyup(function(){
-    var regexp = /\+380\d{9}/g;
+    var regexp = /^\+380\d{9}$/g;
     switcher($PHONE_INPUTTER, regexp);
 });
 
 $NAME_INPUTTER.find("input").keyup(function(){
-    var regexp = /[A-zА-яі ,.']{3,15}/i;
+    var regexp = /^[A-zА-яіїІЇ ,.']{3,15}$/i;
     switcher($NAME_INPUTTER, regexp);
 });
 
@@ -104,7 +155,7 @@ function defaultForm($element){
     $element.removeClass("has-success");
     $element.removeClass("has-error");
 }
-},{"./LocalStorage":2}],4:[function(require,module,exports){
+},{"./LocalStorage":3}],5:[function(require,module,exports){
 /**
  * Created by diana on 12.01.16.
  */
@@ -282,7 +333,7 @@ var pizza_info = [
 ];
 
 module.exports = pizza_info;
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 /**
  * Created by chaika on 02.02.16.
  */
@@ -294,7 +345,7 @@ exports.PizzaMenu_OneItem = ejs.compile("<%\nfunction getIngredientsArray(pizza)
 
 exports.PizzaCart_OneItem = ejs.compile("<%\nfunction isfinal(){\n    return window.location.href.includes(\"order.html\");\n}\n%>\n<div class=\"pizza-row\">\n    <div class=\"order-one ng-scope\">\n        <img class=\"img-aside pizza-icon\" alt=\"Піца\" src=\"<%= pizza.icon %>\">\n        <p class=\"bold pizza-title ng-scope\">\n            <span class=\"order-title\"><%= pizza.title %> \n            (<%= size == \"small_size\" ? \"мала\" : \"велика\" %>)</span>\n        </p>\n        <div class=\"order-text\">\n            <img class=\"diagonal-image\" src=\"assets/images/size-icon.svg\">\n            <span class=\"diagonal\"><%= pizza[size].size %></span>\n            <img class=\"gram-image\" src=\"assets/images/weight.svg\">\n            <span class=\"gram\"><%= pizza[size].weight %></span>\n        </div>\n        <div class=\"price-box\">\n            <span class=\"price\"><%= pizza[size].price*quantity %></span> грн.\n            <a class=\"<%= isfinal() ? \"hide\" : \"\" %> minus btn btn-xs btn-danger circle\" href=\"#\">\n                <i class=\"glyphicon glyphicon-minus icon-white\">\n                </i>\n            </a>\n                <span class=\"label order-pizza-count\" style=\"color:black;\"><%= quantity %> <%= isfinal() ? \"піцца\" : \"\" %></span>\n            <a class=\"<%= isfinal() ? \"hide\" : \"\" %> plus btn btn-xs btn-success circle\" href=\"#\">\n                <i class=\"glyphicon glyphicon-plus icon-white\">\n\n                </i>\n            </a>\n            <a class=\"<%= isfinal() ? \"hide\" : \"\" %> count-clear btn btn-xs btn-default circle remove-pizza\" href=\"#\">\n                <i class=\"glyphicon glyphicon-remove icon-white\">\n\n                </i>\n            </a>\n        </div>\n    </div>\n</div>");
 
-},{"ejs":11}],6:[function(require,module,exports){
+},{"ejs":12}],7:[function(require,module,exports){
 /**
  * Created by chaika on 25.01.16.
  */
@@ -305,11 +356,13 @@ $(function(){
     var PizzaCart = require('./pizza/PizzaCart');
     var Pizza_List = require('./Pizza_List');
     var OrderPage = require("./Order");
+    //var GoogleMap = require("./GoogleMap");
+    var LiqPay = require("./LiqPay");
 
     PizzaCart.initialiseCart();
     PizzaMenu.initialiseMenu();
 });
-},{"./Order":3,"./Pizza_List":4,"./pizza/PizzaCart":7,"./pizza/PizzaMenu":8}],7:[function(require,module,exports){
+},{"./LiqPay":2,"./Order":4,"./Pizza_List":5,"./pizza/PizzaCart":8,"./pizza/PizzaMenu":9}],8:[function(require,module,exports){
 /**
  * Created by chaika on 02.02.16.
  */
@@ -456,14 +509,6 @@ function updateCart() {
     LocalStorage.set("PizzaCart", Cart);
 }
 
-$("#send-order").click(function(){
-    API.createOrder(Cart,function(err, data){
-        if(!err){
-            console.log("data sent");
-        }
-    });
-});
-
 exports.removeFromCart = removeFromCart;
 exports.addToCart = addToCart;
 
@@ -471,7 +516,7 @@ exports.getPizzaInCart = getPizzaInCart;
 exports.initialiseCart = initialiseCart;
 
 exports.PizzaSize = PizzaSize;
-},{"../API":1,"../LocalStorage":2,"../Templates":5}],8:[function(require,module,exports){
+},{"../API":1,"../LocalStorage":3,"../Templates":6}],9:[function(require,module,exports){
 /**
  * Created by chaika on 02.02.16.
  */
@@ -563,11 +608,8 @@ function filterPizza(filter) {
         if(!query || pizza.content[query]) {
             pizza_shown.push(pizza);
         }
-
-        //TODO: зробити фільтри
     });
 
-    //Показати відфільтровані піци
     showPizzaList(pizza_shown);
 }
 
@@ -576,9 +618,11 @@ function initialiseMenu() {
     API.getPizzaList(function(err, data){
         if(err){
             Pizza_List = [];
+            console.log(Pizza_List);
         }
         else{
             Pizza_List = data;
+            console.log(Pizza_List);
         }
         showPizzaList(Pizza_List)
     });
@@ -586,7 +630,7 @@ function initialiseMenu() {
 
 exports.filterPizza = filterPizza;
 exports.initialiseMenu = initialiseMenu;
-},{"../API":1,"../Templates":5,"./PizzaCart":7}],9:[function(require,module,exports){
+},{"../API":1,"../Templates":6,"./PizzaCart":8}],10:[function(require,module,exports){
 (function () {
 	// Basil
 	var Basil = function (options) {
@@ -974,9 +1018,9 @@ exports.initialiseMenu = initialiseMenu;
 
 })();
 
-},{}],10:[function(require,module,exports){
-
 },{}],11:[function(require,module,exports){
+
+},{}],12:[function(require,module,exports){
 /*
  * EJS Embedded JavaScript templates
  * Copyright 2112 Matthew Eernisse (mde@fleegix.org)
@@ -1777,7 +1821,7 @@ if (typeof window != 'undefined') {
   window.ejs = exports;
 }
 
-},{"../package.json":13,"./utils":12,"fs":10,"path":14}],12:[function(require,module,exports){
+},{"../package.json":14,"./utils":13,"fs":11,"path":15}],13:[function(require,module,exports){
 /*
  * EJS Embedded JavaScript templates
  * Copyright 2112 Matthew Eernisse (mde@fleegix.org)
@@ -1920,7 +1964,7 @@ exports.cache = {
 };
 
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 module.exports={
   "_args": [
     [
@@ -2030,7 +2074,7 @@ module.exports={
   "version": "2.5.2"
 }
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -2258,7 +2302,7 @@ var substr = 'ab'.substr(-1) === 'b'
 ;
 
 }).call(this,require('_process'))
-},{"_process":15}],15:[function(require,module,exports){
+},{"_process":16}],16:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -2440,4 +2484,4 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}]},{},[6]);
+},{}]},{},[7]);

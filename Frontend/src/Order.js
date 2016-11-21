@@ -7,17 +7,17 @@ $NAME_INPUTTER = $("#inputName");
 $ADDRESS_INPUTTER = $("#inputAdress");
 
 $ADDRESS_INPUTTER.find("input").keyup(function(){
-    var regexp = /[A-zА-яі ',\-0-9]{3,}/i;
+    var regexp = /^[A-zА-яіїІЇ ',\-0-9]{3,}$/i;
     switcher($ADDRESS_INPUTTER, regexp);
 });
 
 $PHONE_INPUTTER.find("input").keyup(function(){
-    var regexp = /\+380\d{9}/g;
+    var regexp = /^\+380\d{9}$/g;
     switcher($PHONE_INPUTTER, regexp);
 });
 
 $NAME_INPUTTER.find("input").keyup(function(){
-    var regexp = /[A-zА-яі ,.']{3,15}/i;
+    var regexp = /^[A-zА-яіїІЇ ,.']{3,15}$/i;
     switcher($NAME_INPUTTER, regexp);
 });
 

@@ -144,14 +144,6 @@ function updateCart() {
     LocalStorage.set("PizzaCart", Cart);
 }
 
-$("#send-order").click(function(){
-    API.createOrder(Cart,function(err, data){
-        if(!err){
-            console.log("data sent");
-        }
-    });
-});
-
 exports.removeFromCart = removeFromCart;
 exports.addToCart = addToCart;
 
